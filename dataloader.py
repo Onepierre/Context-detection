@@ -11,12 +11,14 @@ from collections import Counter
 
 
 
-class SQuAD(data.Dataset):
-    def __init__(self,):
-        super(SQuAD, self).__init__()
+class SQuAD():
+    def __init__(self):
         self.contexts = []
         self.questions_train = [] 
         self.questions_test = []
+        self.contexts_enc = []
+        self.questions_train_enc = [] 
+        self.questions_test_enc = []
 
     def loadSquad(self, data_train_path, data_test_path):
         self.contexts = [] 
