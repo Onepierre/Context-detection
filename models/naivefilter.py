@@ -8,7 +8,7 @@ from nltk.corpus import stopwords
 from dataloader import SQuAD
 from evaluate import scores
 
-class basicFilter():
+class BasicFilter():
     def __init__(self,contexts):
         self.stopwords = nltk.corpus.stopwords.words('english')
         self.questions = []
