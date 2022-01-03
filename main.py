@@ -19,7 +19,6 @@ if __name__ == "__main__":
 
     test = SQuAD()
     test.loadSquad("Squad/train-v1.1.json","Squad/dev-v1.1.json")
-
     model1 = basicFilter(test.contexts)
     model1.loadQuestions(test.questions_train)
     print("Loaded")
