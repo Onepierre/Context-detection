@@ -16,9 +16,7 @@ class SQuAD():
         self.contexts = []
         self.questions_train = [] 
         self.questions_test = []
-        self.contexts_enc = []
-        self.questions_train_enc = [] 
-        self.questions_test_enc = []
+
 
     def loadSquad(self, data_train_path, data_test_path):
         self.contexts = [] 
@@ -44,4 +42,6 @@ class SQuAD():
                 for question in paragraph["qas"]:
                     self.questions_test.append((question["question"],id_counter))
                 id_counter += 1
+    
+
         
