@@ -11,12 +11,19 @@ from evaluate import scores
 class BasicFilter():
     def __init__(self,contexts):
         self.stopwords = nltk.corpus.stopwords.words('english')
+        self.debug = []
+        bonus = ["one",'us']
+        for a in bonus:
+            self.stopwords.append(a)
+        #print(self.stopwords)
         self.questions = []
         self.labels = []
         self.contexts = []
+        self.scores_id = []
+        self.results = []
         for context in contexts:
             words = nltk.word_tokenize(context)
-            q = [word.lower() for word in words if (word not in self.stopwords and word.isalnum())]
+            q = [word.lower() for word in words if (word.lower() not in self.stopwords and word.isalnum())]
             self.contexts.append(q)
     
     def loadQuestions(self, questions):
@@ -24,7 +31,7 @@ class BasicFilter():
         
         
         for question,label in questions:
-            q = [word.lower() for word in nltk.word_tokenize(question) if (word not in self.stopwords and word.isalnum())]
+            q = [word.lower() for word in nltk.word_tokenize(question) if (word.lower() not in self.stopwords and word.isalnum())]
             self.questions.append(q)
             self.labels.append(label)
 
@@ -33,16 +40,13 @@ class BasicFilter():
         score = 0
         for word in question:
             if word in context:
-                score += 1
-        return score
-        # score = 0
-        # for word in question:
-        #     malus = 1
-        #     for word2 in context:
-        #         if word == word2:
-        #             score += 1/malus
-        #             malus += 1
-        # return score
+                # if len(word) <= 3:
+                #     if word not in self.debug:
+                #         print(word)
+                #         self.debug.append(word)
+                    score += 1
+
+        return score/len(question)
 
     def computeNearestContext(self,question):
         score_max = -1
@@ -52,16 +56,32 @@ class BasicFilter():
             if score > score_max:
                 score_max = score
                 predict_id = i
-        return predict_id
+        return predict_id,score_max
 
     def computeModel(self):
-        results = []
-        min = 0
-        max = 300
-        for question in self.questions[min:max]:
-            results.append(self.computeNearestContext(question))
+        self.results = []
+        for question in self.questions:
+            predict_id,score_max = self.computeNearestContext(question)
+            self.results.append(predict_id)
+            self.scores_id.append(score_max)
         # for i in range(100):
         #     print(self.questions[i])
         #     print(self.contexts[results[i]])
         #     print(self.contexts[self.labels[i]])
-        print(scores(results, self.labels[min:max]))
+        print(scores(self.results, self.labels))
+
+    def getConfidence(self):
+
+        eq = 0
+        neq = 0
+        for i in range(len(self.results)):
+            if not (self.results[i] == self.labels[i]):
+                print("Error")
+                print("Score max : " + str(self.scores_id[i]))
+                th_score = self.computeSimilarity(self.contexts[self.labels[i]],self.questions[i])
+                print("theorical best : " + str(th_score))
+                if self.scores_id[i] == th_score:
+                    eq += 1
+                else:
+                    neq += 1
+        print(eq,neq)
