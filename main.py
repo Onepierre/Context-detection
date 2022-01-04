@@ -18,7 +18,6 @@ from models.bertfilter import BertFilter
 from models.doc2vec import doc2VecFilter
 
 if __name__ == "__main__":
-
     test = SQuAD()
     test.loadSquad("Squad/train-v1.1.json","Squad/dev-v1.1.json")
 
