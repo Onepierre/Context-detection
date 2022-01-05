@@ -16,7 +16,8 @@ from evaluate import scores
 def cos_sim(a,b):
     return dot(a, b)/(norm(a)*norm(b))
 
-# There is a long time of preprocessing so I'll 
+# There is a long time of preprocessing 
+# A bert inference costs 50ms
 class BertFilter():
     def __init__(self):
         self.contexts_encodings = []
