@@ -14,34 +14,23 @@ from collections import Counter
 class SQuAD():
     def __init__(self):
         self.contexts = []
-        self.questions_train = [] 
-        self.questions_test = []
+        self.questions = [] 
+        
 
 
-    def loadSquad(self, data_train_path, data_test_path):
+    def loadSquad(self, data_path):
         self.contexts = [] 
-        self.questions_train = [] 
-        self.questions_test = []
+        self.questions = [] 
 
-        with open(data_train_path,'r') as f:
+        with open(data_path,'r') as f:
             dataset = json.load(f)
+
         id_counter = 0
         for theme in dataset["data"]:
             for paragraph in theme["paragraphs"]:
                 self.contexts.append(paragraph["context"])
                 for question in paragraph["qas"]:
-                    self.questions_train.append((question["question"],id_counter))
+                    self.questions.append((question["question"],id_counter))
                 id_counter += 1
-        
-        # Putting all the contexts in the same tab but using separate questions lists for now
-        with open(data_test_path,'r') as f:
-            dataset = json.load(f)
-        for theme in dataset["data"]:
-            for paragraph in theme["paragraphs"]:
-                self.contexts.append(paragraph["context"])
-                for question in paragraph["qas"]:
-                    self.questions_test.append((question["question"],id_counter))
-                id_counter += 1
-    
 
         
