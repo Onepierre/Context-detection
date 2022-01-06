@@ -28,9 +28,15 @@ class SQuAD():
         id_counter = 0
         for theme in dataset["data"]:
             for paragraph in theme["paragraphs"]:
-                self.contexts.append(paragraph["context"])
-                for question in paragraph["qas"]:
-                    self.questions.append((question["question"],id_counter))
-                id_counter += 1
 
+                if not (paragraph["context"] in self.contexts):
+                    self.contexts.append(paragraph["context"])
+                    for question in paragraph["qas"]:
+                        self.questions.append((question["question"],id_counter))
+                    id_counter += 1
+                else:
+                    id_cont = self.contexts.index(paragraph["context"])
+                    for question in paragraph["qas"]:
+                        self.questions.append((question["question"],id_cont))
+        
         
