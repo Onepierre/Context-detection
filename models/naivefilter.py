@@ -33,7 +33,6 @@ class BasicFilter():
     def loadQuestions(self, questions):
         # Tokenize questions + remove stopwords + lemmatization
         
-        
         for question,label in questions:
             q = [self.lemmatizer.lemmatize(word).lower() for word in nltk.word_tokenize(question) if (word.lower() not in self.stopwords and word.isalnum())]
             self.questions.append(q)
@@ -41,18 +40,14 @@ class BasicFilter():
 
     def computeSimilarity(self,context,question):
         #per word/ count per word/ number of letters in the word
+
         score = 0
         score_2 = 0
         for word in question:
             if word in context:
-                # if len(word) <= 3:
-                #     if word not in self.debug:
-                #         print(word)
-                #         self.debug.append(word)
                 score += 1
             # for  word2 in context:
             #     if word == word2:
-            #         #print(word)
             #         score += 1
 
         return score/len(question),score_2
@@ -65,6 +60,7 @@ class BasicFilter():
 
         # Quadratic in length of the question
         # may be too long
+
         score = 0
         n = len(question)
         for i in range(n):
@@ -75,7 +71,6 @@ class BasicFilter():
                 if q_text in context_text:
                     #best 
                     score += 1/(j-i)
-                    #score += 1
         return score/len(question),0
 
 
@@ -102,13 +97,11 @@ class BasicFilter():
             predict_id,score_max = self.computeNearestContext(question)
             self.results.append(predict_id)
             self.scores_id.append(score_max)
-        # for i in range(100):
-        #     print(self.questions[i])
-        #     print(self.contexts[results[i]])
-        #     print(self.contexts[self.labels[i]])
         print(scores(self.results, self.labels))
 
     def getConfidence(self):
+        
+        # For tests only
 
         eq = 0
         neq = 0
@@ -125,4 +118,4 @@ class BasicFilter():
                 for word in self.questions[i]:
                     if word in self.contexts[self.results[i]]:
                         print(word)
-        #print(eq,neq)
+        print(eq,neq)
